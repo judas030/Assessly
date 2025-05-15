@@ -575,7 +575,7 @@ function App() {
             <header className="App-header">
                 <div className="header-title-logo">
                     <img src="/assessly-logo.png" alt="Assessly Logo" className="app-logo" /> 
-                    <h1>Assessly - Feature Evaluation Dashboard</h1>
+                    <h1>Feature Evaluation Dashboard</h1>
                 </div>
                 {/* Actions can go here if needed */}
             </header>
