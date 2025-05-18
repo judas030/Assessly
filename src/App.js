@@ -153,7 +153,6 @@ function App() {
     const [isGa4FetchModalOpen, setIsGa4FetchModalOpen] = useState(false);
     const [ga4FetchTarget, setGa4FetchTarget] = useState(null); 
     const [ga4SelectedMetric, setGa4SelectedMetric] = useState(GA4_METRICS_OPTIONS[0].value);
-const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
     const [ga4StartDate, setGa4StartDate] = useState('');
     const [ga4EndDate, setGa4EndDate] = useState('');
 
@@ -255,23 +254,26 @@ const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
                 setTimeout(() => setNotification(''), 3000);
             }
         }
-        setIsGa4FetchModalOpen(true);
-    };
-
-    
-const handleFetchFromGa4 = async () => {
-    if (!ga4FetchTarget || !ga4SelectedMetric || !ga4StartDate || !ga4EndDate) {
-        setGa4Error('Please select a metric and a valid date range.');
-        return;
+        try {
+        const res = await fetch('/api/availableMetrics');
+        const data = await res.json();
+        setGa4AvailableMetrics(data.metrics || []);
+    } catch (err) {
+        console.error("Error loading available GA4 metrics:", err);
+        setGa4AvailableMetrics(GA4_METRICS_OPTIONS); // fallback if needed
     }
 
-    // Format and validate dates
-    const formattedStart = new Date(ga4StartDate).toISOString().split("T")[0];
-    const formattedEnd = new Date(ga4EndDate).toISOString().split("T")[0];
+    setIsGa4FetchModalOpen(true);
+    };
 
-    setIsGa4Fetching(true);
-    setGa4Error('');
-    try {
+    const handleFetchFromGa4 = async () => {
+        if (!ga4FetchTarget || !ga4SelectedMetric || !ga4StartDate || !ga4EndDate) {
+            setGa4Error('Please select a metric and a valid date range.');
+            return;
+        }
+        setIsGa4Fetching(true);
+        setGa4Error('');
+        try {
             const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY_ID}:runReport`, {
                 method: 'POST',
                 headers: {
@@ -780,19 +782,9 @@ const handleFetchFromGa4 = async () => {
             <Modal isOpen={isGa4FetchModalOpen} onClose={() => setIsGa4FetchModalOpen(false)} title="Fetch Data from Google Analytics 4">
                 <div className="form-group">
                     <label htmlFor="ga4Metric">Select Metric:</label>
-                    <select
-  id="ga4Metric"
-  value={ga4SelectedMetric}
-  onChange={(e) => setGa4SelectedMetric(e.target.value)}
-  required
->
-  <option value="">Select a GA4 metric</option>
-  {ga4AvailableMetrics.map(m => (
-    <option key={m.apiName} value={m.apiName}>
-      {m.uiName || m.apiName}
-    </option>
-  ))}
-</select>
+                    <select id="ga4Metric" value={ga4SelectedMetric} onChange={(e) => setGa4SelectedMetric(e.target.value)}>
+                        {GA4_METRICS_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="ga4StartDate">Start Date:</label>
