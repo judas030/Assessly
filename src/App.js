@@ -152,7 +152,6 @@ function App() {
     const [ga4Error, setGa4Error] = useState('');
     const [isGa4FetchModalOpen, setIsGa4FetchModalOpen] = useState(false);
     const [ga4FetchTarget, setGa4FetchTarget] = useState(null); 
-    const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
     const [ga4SelectedMetric, setGa4SelectedMetric] = useState(GA4_METRICS_OPTIONS[0].value);
     const [ga4StartDate, setGa4StartDate] = useState('');
     const [ga4EndDate, setGa4EndDate] = useState('');
@@ -661,23 +660,7 @@ function App() {
                                                             kpi.post_entries.map((entry, index) => (
                                                                 <div key={index} className="post-entry-detail">
                                                                     <p><strong>{entry.title || `Entry ${index + 1}`} (Added: {new Date(entry.date_added).toLocaleDateString()})</strong></p>
-                                                                    
-{(() => {
-  const pre = parseFloat(kpi.pre_value);
-  const post = parseFloat(entry.value);
-  if (!isNaN(pre) && !isNaN(post)) {
-    const diff = post - pre;
-    const percent = ((diff / pre) * 100).toFixed(1);
-    const symbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '=';
-    return (
-      <p>
-        Value: {entry.value} ({symbol} {percent}%, {diff > 0 ? '+' : ''}{diff})
-      </p>
-    );
-  }
-  return <p>Value: {entry.value}</p>;
-})()}
-
+                                                                    <p>Value: {entry.value}</p>
                                                                     {entry.note && <p>Note: {entry.note}</p>}
                                                                 </div>
                                                             ))
@@ -804,17 +787,8 @@ function App() {
                     </select>
                 </div>
                 <div className="form-group">
-                    
-<div className="form-group">
-  <label>Pre-Change Date Range:</label>
-  <input type="date" value={ga4StartDate} disabled readOnly />
-  <span style={{ margin: '0 10px' }}>to</span>
-  <input type="date" value={ga4EndDate} disabled readOnly />
-  <p style={{ fontSize: '0.85em', color: '#666' }}>
-    Calculated from Date of Change and Pre-Duration
-  </p>
-</div>
-/>
+                    <label htmlFor="ga4StartDate">Start Date:</label>
+                    <input type="date" id="ga4StartDate" value={ga4StartDate} onChange={(e) => setGa4StartDate(e.target.value)} disabled={ga4FetchTarget?.type === 'pre'}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="ga4EndDate">End Date:</label>
