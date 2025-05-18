@@ -687,7 +687,7 @@ function App() {
     const color = isPositive ? 'green' : isNegative ? 'red' : 'gray';
     return (
       <p>
-        Value: {entry.value} <span style={{ color }}>{symbol} {percent}%, {diff > 0 ? '+' : ''}{diff}</span>
+        Value: {entry.value} <span style={{ color: color }}>{symbol} {percent}%, {diff > 0 ? '+' : ''}{diff}</span>
       </p>
     );
   }
