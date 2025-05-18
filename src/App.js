@@ -222,7 +222,7 @@ function App() {
         setTimeout(() => setNotification(''), 3000);
     };
 
-    const openGa4FetchModal = (type, kpiId, featureId = null) => {
+    const openGa4FetchModal = async (type, kpiId, featureId = null) => {
         if (!ga4AccessToken) {
             setNotification('Please connect to Google Analytics first.');
             setTimeout(() => setNotification(''), 3000);
