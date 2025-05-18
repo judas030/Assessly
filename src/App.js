@@ -675,7 +675,24 @@ function App() {
       </p>
     );
   }
+  return {(() => {
+  const pre = parseFloat(kpi.pre_value);
+  const post = parseFloat(entry.value);
+  if (!isNaN(pre) && !isNaN(post)) {
+    const diff = post - pre;
+    const percent = ((diff / pre) * 100).toFixed(1);
+    const isPositive = diff > 0;
+    const isNegative = diff < 0;
+    const symbol = isPositive ? '↑' : isNegative ? '↓' : '→';
+    const color = isPositive ? 'green' : isNegative ? 'red' : 'gray';
+    return (
+      <p>
+        Value: {entry.value} <span style={{ color }}>{symbol} {percent}%, {diff > 0 ? '+' : ''}{diff}</span>
+      </p>
+    );
+  }
   return <p>Value: {entry.value}</p>;
+})()};
 })()}
 
                                                                     {entry.note && <p>Note: {entry.note}</p>}
