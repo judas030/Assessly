@@ -258,14 +258,20 @@ const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
         setIsGa4FetchModalOpen(true);
     };
 
-    const handleFetchFromGa4 = async () => {
-        if (!ga4FetchTarget || !ga4SelectedMetric || !ga4StartDate || !ga4EndDate) {
-            setGa4Error('Please select a metric and a valid date range.');
-            return;
-        }
-        setIsGa4Fetching(true);
-        setGa4Error('');
-        try {
+    
+const handleFetchFromGa4 = async () => {
+    if (!ga4FetchTarget || !ga4SelectedMetric || !ga4StartDate || !ga4EndDate) {
+        setGa4Error('Please select a metric and a valid date range.');
+        return;
+    }
+
+    // Format and validate dates
+    const formattedStart = new Date(ga4StartDate).toISOString().split("T")[0];
+    const formattedEnd = new Date(ga4EndDate).toISOString().split("T")[0];
+
+    setIsGa4Fetching(true);
+    setGa4Error('');
+    try {
             const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY_ID}:runReport`, {
                 method: 'POST',
                 headers: {
