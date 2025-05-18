@@ -153,6 +153,7 @@ function App() {
     const [isGa4FetchModalOpen, setIsGa4FetchModalOpen] = useState(false);
     const [ga4FetchTarget, setGa4FetchTarget] = useState(null); 
     const [ga4SelectedMetric, setGa4SelectedMetric] = useState(GA4_METRICS_OPTIONS[0].value);
+const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
     const [ga4StartDate, setGa4StartDate] = useState('');
     const [ga4EndDate, setGa4EndDate] = useState('');
 
@@ -773,9 +774,19 @@ function App() {
             <Modal isOpen={isGa4FetchModalOpen} onClose={() => setIsGa4FetchModalOpen(false)} title="Fetch Data from Google Analytics 4">
                 <div className="form-group">
                     <label htmlFor="ga4Metric">Select Metric:</label>
-                    <select id="ga4Metric" value={ga4SelectedMetric} onChange={(e) => setGa4SelectedMetric(e.target.value)}>
-                        {GA4_METRICS_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                    </select>
+                    <select
+  id="ga4Metric"
+  value={ga4SelectedMetric}
+  onChange={(e) => setGa4SelectedMetric(e.target.value)}
+  required
+>
+  <option value="">Select a GA4 metric</option>
+  {ga4AvailableMetrics.map(m => (
+    <option key={m.apiName} value={m.apiName}>
+      {m.uiName || m.apiName}
+    </option>
+  ))}
+</select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="ga4StartDate">Start Date:</label>
