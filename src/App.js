@@ -152,6 +152,7 @@ function App() {
     const [ga4Error, setGa4Error] = useState('');
     const [isGa4FetchModalOpen, setIsGa4FetchModalOpen] = useState(false);
     const [ga4FetchTarget, setGa4FetchTarget] = useState(null); 
+    const [ga4AvailableMetrics, setGa4AvailableMetrics] = useState([]);
     const [ga4SelectedMetric, setGa4SelectedMetric] = useState(GA4_METRICS_OPTIONS[0].value);
     const [ga4StartDate, setGa4StartDate] = useState('');
     const [ga4EndDate, setGa4EndDate] = useState('');
