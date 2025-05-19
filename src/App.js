@@ -669,9 +669,10 @@ function App() {
     const diff = post - pre;
     const percent = ((diff / pre) * 100).toFixed(1);
     const symbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '=';
+    const color = diff > 0 ? 'green' : diff < 0 ? 'red' : 'gray';
     return (
       <p>
-        Value: {entry.value} ({symbol} {percent}%, {diff > 0 ? '+' : ''}{diff})
+        Value: {entry.value} <span style={{ color }}>{symbol} {percent}%, {diff > 0 ? '+' : ''}{diff}</span>
       </p>
     );
   }
